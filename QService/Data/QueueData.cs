@@ -15,6 +15,12 @@ namespace QService.Data
 
         public void Remove(string activityId)
         {
+            Update(activityId);
+        }
+
+        //Remove expired persons
+        public void Update(string activityId)
+        {
             var sortedQueue = ActivityQueue.Where(x => x.ActitityId == activityId).ToList();
 
             foreach (var person in sortedQueue)
@@ -22,7 +28,7 @@ namespace QService.Data
                 if (person.TimeAdded < DateTime.Now.AddMinutes(-2))
                 {
                     ActivityQueue.Remove(person);
-                    Remove(activityId);
+                    Update(activityId);
                     break;
                 }
             }

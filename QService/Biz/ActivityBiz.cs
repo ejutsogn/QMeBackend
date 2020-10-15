@@ -30,6 +30,7 @@ namespace QService.Biz
             foreach (var activity in activities)
             {
                 UpdateActivityStatusAndQueue(activity);
+                _queueBiz.UpdateQueue(activity.Id);
             }
         }
 

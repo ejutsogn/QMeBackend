@@ -28,6 +28,19 @@ namespace QService.Biz
             return queueInfo;
         }
 
+        /// <summary>
+        /// Person removed from queue after 2 minutes
+        /// </summary>
+        /// <param name="activityId"></param>
+        /// <returns></returns>
+        public QueueInfo UpdateQueue(string activityId)
+        {
+            _queueData.Update(activityId);
+            var queueInfo = GetActivityQueue(activityId);
+
+            return queueInfo;
+        }
+
         public QueueInfo RemoveFromQueue(string activityId)
         {
             _queueData.RemovePerson(activityId);
