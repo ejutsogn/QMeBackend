@@ -1,10 +1,9 @@
 ﻿
-namespace QMeService.Model
+namespace Bumbleberry.QMeService.Models 
 {
-    public class Company
+    public class Country
     {
         public string Id { get; set; }
-        public Country Country { get; set; }
         public string Name { get; set; }
     }
 }

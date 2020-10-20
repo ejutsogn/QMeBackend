@@ -1,9 +1,9 @@
-﻿using QMeService.Data;
-using QMeService.Model;
+﻿using Bumbleberry.QMeService.Data;
+using Bumbleberry.QMeService.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QMeService.Biz
+namespace Bumbleberry.QMeService.Biz
 {
     public class QueueBiz
     {
@@ -53,7 +53,7 @@ namespace QMeService.Biz
             return queueInfo;
         }
 
-        public IEnumerable<Model.Queue> GetActivityQueues()
+        public IEnumerable<Models.Queue> GetActivityQueues()
         {
             return _queueData.GetActivityQueues();
         }
@@ -64,7 +64,7 @@ namespace QMeService.Biz
             var sortedQueue = activityQueues.Where(x => x.ActitityId == activityId);
 
             var queueInfo = new QueueInfo 
-            { ActitityId = activityId, NumbersInQueue = sortedQueue.Count(), ActivityQueue = sortedQueue };
+            { ActitityId = activityId, TotalNumbersInQueue = sortedQueue.Count(), ActivityQueue = sortedQueue };
 
             return queueInfo;
         }

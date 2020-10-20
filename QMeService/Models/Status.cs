@@ -1,6 +1,6 @@
-﻿using QMeService.Helper;
+﻿using Bumbleberry.QMeService.Helper;
 
-namespace QMeService.Model
+namespace Bumbleberry.QMeService.Models
 {
     public class Status
     {

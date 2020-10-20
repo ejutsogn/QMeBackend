@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QMeService.Data
+namespace Bumbleberry.QMeService.Data
 {
     public class QueueData
     {
-        private static List<Model.Queue> ActivityQueue = new List<Model.Queue>();
-        private static List<Model.Queue> NewActivityQueue = new List<Model.Queue>();
+        private static List<Models.Queue> ActivityQueue = new List<Models.Queue>();
+        private static List<Models.Queue> NewActivityQueue = new List<Models.Queue>();
 
         public void Add(string activityId)
         {
-            ActivityQueue.Add(new Model.Queue(activityId));
+            ActivityQueue.Add(new Models.Queue(activityId));
         }
 
         public void Remove(string activityId)
@@ -41,12 +41,12 @@ namespace QMeService.Data
             ActivityQueue.Remove(personInQueue);
         }
 
-        public List<Model.Queue> GetActivityQueues()
+        public List<Models.Queue> GetActivityQueues()
         {
             return ActivityQueue;
         }
 
-        public void StoreQueue(List<Model.Queue> activityQueue)
+        public void StoreQueue(List<Models.Queue> activityQueue)
         {
             ActivityQueue = activityQueue;
         }

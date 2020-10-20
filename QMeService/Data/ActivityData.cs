@@ -1,8 +1,8 @@
-﻿using QMeService.Model;
+﻿using Bumbleberry.QMeService.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QMeService.Data
+namespace Bumbleberry.QMeService.Data
 {
     public class ActivityData
     {

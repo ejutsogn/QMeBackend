@@ -1,9 +1,9 @@
-﻿using QMeService.Data;
-using QMeService.Model;
+﻿using Bumbleberry.QMeService.Data;
+using Bumbleberry.QMeService.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QMeService.Biz
+namespace Bumbleberry.QMeService.Biz
 {
     public class ActivityBiz
     {

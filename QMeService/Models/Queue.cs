@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QMeService.Model
+namespace Bumbleberry.QMeService.Models
 {
     public class Queue
     {

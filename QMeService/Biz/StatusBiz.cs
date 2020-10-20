@@ -1,8 +1,8 @@
-﻿using QMeService.Data;
-using QMeService.Helper;
-using QMeService.Model;
+﻿using Bumbleberry.QMeService.Data;
+using Bumbleberry.QMeService.Helper;
+using Bumbleberry.QMeService.Models;
 
-namespace QMeService.Biz
+namespace Bumbleberry.QMeService.Biz
 {
     public class StatusBiz
     {

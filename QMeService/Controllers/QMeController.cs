@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using QMeService.Biz;
-using QMeService.Model;
+using Bumbleberry.QMeService.Biz;
+using Bumbleberry.QMeService.Models;
 
-namespace QMeService.Controllers
+namespace Bumbleberry.QMeService.Controllers
 {
     [ApiController]
     //[Route("[controller]")]
