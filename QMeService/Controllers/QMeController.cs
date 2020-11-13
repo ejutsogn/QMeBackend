@@ -23,7 +23,7 @@ namespace Bumbleberry.QMeService.Controllers
         [Route("QMe/GetCountries")]
         public IEnumerable<Activity> GetCountries()
         {
-            var activities = new ActivityBiz().GetActivities(null, null);
+            var activities = new ActivityBiz().GetActivities("","","");
             return activities;
         }
 
@@ -31,33 +31,40 @@ namespace Bumbleberry.QMeService.Controllers
         [Route("QMe/GetCompanies")]
         public IEnumerable<Activity> GetCompanies(string countryId)
         {
-            var activities = new ActivityBiz().GetActivities(null, null);
+            var activities = new ActivityBiz().GetActivities("","","");
             return activities;
         }
 
         [HttpGet]
         [Route("QMe/GetActivities")]
-        public IEnumerable<Activity> GetActivities(string countryid, string companyid)
+        public IEnumerable<Activity> GetActivities(string countryId="", string companyId="", string userId="1001")
         {
-            var activities = new ActivityBiz().GetActivities(countryid, companyid);
+            if (string.IsNullOrEmpty(userId))
+                userId = "-999";
+            
+            var activities = new ActivityBiz().GetActivities(countryId, companyId, userId);
             return activities;
         }
 
         [HttpPost]
         [Route("QMe/AddInQueue")]
-        public Activity AddInQueue([FromBody] string activityId)
+        public Activity AddInQueue([FromBody] string countryId, string companyId, string userId, string activityId)
         {
-            new QueueBiz().AddInQueue(activityId);
-            var activity = new ActivityBiz().GetActivity(activityId);
+            if (string.IsNullOrEmpty(userId))
+                userId = "-999";
+            new QueueBiz().AddInQueue(countryId, companyId, userId, activityId);
+            var activity = new ActivityBiz().GetActivity(countryId, companyId, userId, activityId);
             return activity;
         }
 
         [HttpPost]
         [Route("QMe/RemoveFromQueue")]
-        public Activity RemoveFromQueue([FromBody] string activityId)
+        public Activity RemoveFromQueue([FromBody] string countryId, string companyId, string userId, string activityId)
         {
-            new QueueBiz().RemoveFromQueue(activityId);
-            var activity = new ActivityBiz().GetActivity(activityId);
+            if (string.IsNullOrEmpty(userId))
+                userId = "-999";
+            new QueueBiz().RemoveFromQueue(countryId, companyId, userId, activityId);
+            var activity = new ActivityBiz().GetActivity(countryId, companyId, userId, activityId);
             return activity;
         }
     }

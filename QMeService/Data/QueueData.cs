@@ -4,14 +4,23 @@ using System.Linq;
 
 namespace Bumbleberry.QMeService.Data
 {
-    public class QueueData
+    public interface IQueueData
+    {
+        void Add(string countryId, string companyId, string userId, string activityId);
+        List<Models.Queue> GetActivityQueues();
+        void Remove(string activityId);
+        void RemovePerson(string countryId, string companyId, string activityId, string userId);
+        void StoreQueue(List<Models.Queue> activityQueue);
+        void Update(string activityId);
+    }
+
+    public class QueueData : IQueueData
     {
         private static List<Models.Queue> ActivityQueue = new List<Models.Queue>();
-        private static List<Models.Queue> NewActivityQueue = new List<Models.Queue>();
 
-        public void Add(string activityId)
+        public void Add(string countryId, string companyId, string userId, string activityId)
         {
-            ActivityQueue.Add(new Models.Queue(activityId));
+            ActivityQueue.Add(new Models.Queue(countryId, companyId, userId, activityId));
         }
 
         public void Remove(string activityId)
@@ -35,9 +44,12 @@ namespace Bumbleberry.QMeService.Data
             }
         }
 
-        public void RemovePerson(string activityId)
+        public void RemovePerson(string countryId, string companyId, string activityId, string userId)
         {
-            var personInQueue = ActivityQueue.FindLast(x => x.ActitityId == activityId);
+            var personInQueue = ActivityQueue.FindLast(x => x.CountryId == countryId &&
+                                                            x.CompanyId == companyId &&
+                                                            x.UserId == userId &&
+                                                            x.ActitityId == activityId);
             ActivityQueue.Remove(personInQueue);
         }
 
