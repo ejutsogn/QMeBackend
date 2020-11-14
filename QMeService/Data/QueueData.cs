@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bumbleberry.QMeService.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,11 +17,11 @@ namespace Bumbleberry.QMeService.Data
 
     public class QueueData : IQueueData
     {
-        private static List<Models.Queue> ActivityQueue = new List<Models.Queue>();
-
         public void Add(string countryId, string companyId, string userId, string activityId)
         {
-            ActivityQueue.Add(new Models.Queue(countryId, companyId, userId, activityId));
+            var activityQueue = CacheHelper.GetActivityQueue().ToList();
+            activityQueue.Add(new Models.Queue(countryId, companyId, userId, activityId));
+            CacheHelper.SetActivityQueue(activityQueue);
         }
 
         public void Remove(string activityId)
@@ -31,36 +32,40 @@ namespace Bumbleberry.QMeService.Data
         //Remove expired persons
         public void Update(string activityId)
         {
-            var sortedQueue = ActivityQueue.Where(x => x.ActitityId == activityId).ToList();
+            var activityQueue = CacheHelper.GetActivityQueue().ToList();
+            var sortedQueue = activityQueue.Where(x => x.ActitityId == activityId).ToList();
 
             foreach (var person in sortedQueue)
             {
                 if (person.TimeAdded < DateTime.Now.AddMinutes(-2))
                 {
-                    ActivityQueue.Remove(person);
+                    activityQueue.Remove(person);
                     Update(activityId);
                     break;
                 }
             }
+            StoreQueue(activityQueue);
         }
 
         public void RemovePerson(string countryId, string companyId, string activityId, string userId)
         {
-            var personInQueue = ActivityQueue.FindLast(x => x.CountryId == countryId &&
+            var activityQueue = CacheHelper.GetActivityQueue().ToList();
+            var personInQueue = activityQueue.FindLast(x => x.CountryId == countryId &&
                                                             x.CompanyId == companyId &&
                                                             x.UserId == userId &&
                                                             x.ActitityId == activityId);
-            ActivityQueue.Remove(personInQueue);
+            activityQueue.Remove(personInQueue);
+            StoreQueue(activityQueue);
         }
 
         public List<Models.Queue> GetActivityQueues()
         {
-            return ActivityQueue;
+            return CacheHelper.GetActivityQueue().ToList(); ;
         }
 
         public void StoreQueue(List<Models.Queue> activityQueue)
         {
-            ActivityQueue = activityQueue;
+            CacheHelper.SetActivityQueue(activityQueue);
         }
     }
 }

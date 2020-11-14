@@ -2,23 +2,25 @@
 using Bumbleberry.QMeService.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Bumbleberry.QMeService.Biz
 {
     public class QueueBiz
     {
         IQueueData _queueData;
+        ActivityData _activityData;
 
         public QueueBiz()
         {
             _queueData = new QueueData();
+            _activityData = new ActivityData();
             AutomaticPopulateQueue();
         }
 
         public QueueBiz(IQueueData queueData)
         {
             _queueData = queueData;
+            _activityData = new ActivityData();
         }
 
         /// <summary>
@@ -77,24 +79,31 @@ namespace Bumbleberry.QMeService.Biz
                 var currentQueue = activityQueues.Where(x => x.ActitityId == activityQueue.Key);
                 var currentQueueCount = currentQueue.Count();
 
-                var queueInfo = new QueueInfo
-                {   ActitityId = activityQueue.Key, 
-                    TotalNumbersInQueue = currentQueueCount, 
-                    ActivityQueue = currentQueue 
-                };
-
+                var queueInfo = GetNewQueueInfo(activityQueue.Key, currentQueueCount, currentQueue);
                 queueInfos.Add(queueInfo);
             }
 
             RecalculateQueueInfos(queueInfos, activityQueues);
+            AddQueueInfoForActivitiesWithNoQueue(countryId, companyId, queueInfos, activityQueuesGroupedByActivity);
             RecalculateYourInfo(userId, queueInfos);
 
             return queueInfos;
         }
 
+        private QueueInfo GetNewQueueInfo(string actitityId, int currentQueueCount, IEnumerable<Queue> currentQueue)
+        {
+            var queueInfo = new QueueInfo
+            {
+                ActitityId = actitityId,
+                TotalNumbersInQueue = currentQueueCount,
+                ActivityQueue = currentQueue
+            };
+            return queueInfo;
+        }
+
         protected void RecalculateYourInfo(string userId, IEnumerable<QueueInfo> queueInfos)
         {
-            foreach (var queueInfo in queueInfos)
+            foreach (var queueInfo in queueInfos.Where(x => x.TotalNumbersInQueue > 0))
             {
                 var queueList = queueInfo.ActivityQueue;
                 var yourQueueItem = queueList.FirstOrDefault(x => x.UserId == userId);
@@ -114,7 +123,19 @@ namespace Bumbleberry.QMeService.Biz
             }
         }
 
-        private QueueInfoLight GetActivityWithMaxCountInQueue(IEnumerable<QueueInfo> queueInfos, IEnumerable<Queue> activityQueues)
+        private void AddQueueInfoForActivitiesWithNoQueue(string countryId, string companyId, List<QueueInfo> queueInfos, List<IGrouping<string, Queue>> activitiesWithQueue)
+        {
+            var allActivities = _activityData.GetActivities(countryId, companyId);
+            var activityWithNoQueue = allActivities.Where(activity => !activitiesWithQueue.Any(queue => queue.Key == activity.Id));
+
+            foreach (var activity in activityWithNoQueue)
+            {
+                var queueInfo = GetNewQueueInfo(activity.Id, 0, null);
+                queueInfos.Add(queueInfo);
+            }
+        }
+
+        private QueueInfo GetActivityWithMaxCountInQueue(IEnumerable<QueueInfo> queueInfos, IEnumerable<Queue> activityQueues)
         {
             var listWithActivityIdAndMaxCountInQueue = activityQueues
                                     .GroupBy(x => x.ActitityId)
@@ -125,7 +146,8 @@ namespace Bumbleberry.QMeService.Biz
             var activityIdWithLongestWaitTime = GetActivityIdWithLongestWaitTime(queueInfos);
             var activityIdAndMaxCountInQueue = listWithActivityIdAndMaxCountInQueue.FirstOrDefault();
 
-            return new QueueInfoLight(activityIdAndMaxCountInQueue.Id, activityIdAndMaxCountInQueue.Count);
+            var queueInfo = GetNewQueueInfo(activityIdAndMaxCountInQueue.Id, activityIdAndMaxCountInQueue.Count, activityQueues);
+            return queueInfo;
         }
 
         protected string GetActivityIdWithMaxQueueNumbers(IEnumerable<Queue> activityQueues)
@@ -178,11 +200,15 @@ namespace Bumbleberry.QMeService.Biz
             if (_queueData.GetActivityQueues().Count == 0)
             {
                 QueueAutomaticPopulator.PopulateQueues("1", 10).ToList();
+                QueueAutomaticPopulator.PopulateQueues("2", 0).ToList();
                 QueueAutomaticPopulator.PopulateQueues("3", 50).ToList();
                 QueueAutomaticPopulator.PopulateQueues("4", 99).ToList();
+                QueueAutomaticPopulator.PopulateQueues("5", 0).ToList();
                 QueueAutomaticPopulator.PopulateQueues("6", 110).ToList();
                 QueueAutomaticPopulator.PopulateQueues("7", 15).ToList();
+                QueueAutomaticPopulator.PopulateQueues("8", 8).ToList();
                 QueueAutomaticPopulator.PopulateQueues("9", 210).ToList();
+                QueueAutomaticPopulator.PopulateQueues("10", 10).ToList();
             }
         }
     }

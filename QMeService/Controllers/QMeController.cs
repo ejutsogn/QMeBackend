@@ -37,7 +37,7 @@ namespace Bumbleberry.QMeService.Controllers
 
         [HttpGet]
         [Route("QMe/GetActivities")]
-        public IEnumerable<Activity> GetActivities(string countryId="", string companyId="", string userId="1001")
+        public IEnumerable<Activity> GetActivities(string countryId="", string companyId="", string userId="10")
         {
             if (string.IsNullOrEmpty(userId))
                 userId = "-999";
