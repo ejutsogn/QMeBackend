@@ -11,6 +11,21 @@ namespace Bumbleberry.QMeService.Helper
         Opening
     }
 
+    public enum ItemColors
+    {
+        AntiqueWhite = 0,
+        Red,
+        Blue,
+        Yellow,
+        Orange,
+        White,
+        Black,
+        Pink,
+        Gray,
+        LightGreen,
+        DarkGreen
+    }
+
     public enum Sex
     {
         Male,
