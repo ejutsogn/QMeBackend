@@ -38,4 +38,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Assets\Images\Norway\Kongeparken\" />
+  </ItemGroup>
+
 </Project>
