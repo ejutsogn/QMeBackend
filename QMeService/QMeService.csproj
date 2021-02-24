@@ -21,7 +21,7 @@
     <None Include="wwwroot\Assets\Images\Norway\KRSDyrepark\karusell.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="wwwroot\Assets\Images\Norway\KRSDyrepark\moskstraktor.png">
+    <None Include="wwwroot\Assets\Images\Norway\KRSDyrepark\moskstraktor4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="wwwroot\Assets\Images\Norway\KRSDyrepark\nilen.png">
