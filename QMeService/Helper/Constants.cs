@@ -29,7 +29,9 @@ namespace Bumbleberry.QMeService.Helper
     public enum Sex
     {
         Male,
-        Female
+        Female,
+        Hen,
+        NotSet
     }
 
     public enum AddressType

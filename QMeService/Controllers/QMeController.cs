@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bumbleberry.QMeService.Biz;
 using Bumbleberry.QMeService.Models;
+using Bumbleberry.QMeService.Data.Log;
 
 namespace Bumbleberry.QMeService.Controllers
 {
@@ -66,6 +67,25 @@ namespace Bumbleberry.QMeService.Controllers
             new QueueBiz().RemoveFromQueue(countryId, companyId, userId, activityId);
             var activity = new ActivityBiz().GetActivity(countryId, companyId, userId, activityId);
             return activity;
+        }
+
+        [HttpGet]
+        [Route("QMe/GetUserGuid")]
+        public string GetUserGuid([FromBody] DeviceInfo deviceInfo)
+        {
+            var guid = new UserBiz().GetUserGuid(deviceInfo);
+            return guid;
+        }
+
+
+
+        // Methods for log-info
+
+        [HttpGet]
+        [Route("QMe/GetActivityLog")]
+        public IEnumerable<ActivityLog> GetActivityLog()
+        {
+            return ActivityLogData.GetLog();
         }
     }
 }
