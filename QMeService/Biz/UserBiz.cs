@@ -2,6 +2,7 @@
 using Bumbleberry.QMeService.Data.Log;
 using Bumbleberry.QMeService.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Bumbleberry.QMeService.Biz
 {
@@ -45,6 +46,11 @@ namespace Bumbleberry.QMeService.Biz
             var guid = random.Next(1, 9).ToString() + random.Next(1, 9).ToString();
 
             return guid;
+        }
+
+        public IEnumerable<DeviceInfo> GetDeviceInfos()
+        {
+            return new UserData().GetDeviceInfos();
         }
     }
 }

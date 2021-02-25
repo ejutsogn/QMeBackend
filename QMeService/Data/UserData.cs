@@ -26,5 +26,10 @@ namespace Bumbleberry.QMeService.Data
 
             return deviceInfo;
         }
+
+        public IEnumerable<DeviceInfo> GetDeviceInfos()
+        {
+            return StaticDb.deviceInfos;
+        }
     }
 }

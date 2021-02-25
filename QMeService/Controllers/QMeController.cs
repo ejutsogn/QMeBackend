@@ -79,7 +79,14 @@ namespace Bumbleberry.QMeService.Controllers
 
 
 
-        // Methods for log-info
+        // Methods for testing
+
+        [HttpGet]
+        [Route("QMe/GetDeviceInfos")]
+        public IEnumerable<DeviceInfo> GetDeviceInfos()
+        {
+            return new UserBiz().GetDeviceInfos();
+        }
 
         [HttpGet]
         [Route("QMe/GetActivityLog")]
