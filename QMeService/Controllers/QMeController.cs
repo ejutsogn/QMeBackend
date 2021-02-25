@@ -69,7 +69,7 @@ namespace Bumbleberry.QMeService.Controllers
             return activity;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("QMe/GetUserGuid")]
         public string GetUserGuid([FromBody] DeviceInfo deviceInfo)
         {

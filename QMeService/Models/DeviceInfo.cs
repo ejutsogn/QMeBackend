@@ -12,6 +12,6 @@ namespace Bumbleberry.QMeService.Models
         public string UserName { get; set; }
         public string UserPassword { get; set; }
         public string UserGuid { get; set; }
-        public Person Person { get; set; }
+        //public Person Person { get; set; }
     }
 }
