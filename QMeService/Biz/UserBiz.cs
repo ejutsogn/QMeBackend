@@ -13,8 +13,11 @@ namespace Bumbleberry.QMeService.Biz
             var newDeviceInfo = deviceInfo;
             if (!string.IsNullOrWhiteSpace(newDeviceInfo.UserGuid))
             {
-                ActivityLogData.Log(newDeviceInfo.UserGuid, "UserBiz.GetUserGuid()", $"UserGuid already exists in received DeviceInfo");
-                return newDeviceInfo;
+                ActivityLogData.Log(newDeviceInfo.UserGuid, "UserBiz.GetUserGuid()", $"UserGuid({newDeviceInfo.UserGuid}) found in received DeviceInfo");
+                if(IsUniqueUserGuid(newDeviceInfo.UserGuid))
+                    return newDeviceInfo;
+                else
+                    LogActivityCreateGuid(newDeviceInfo, $"UserGuid({newDeviceInfo.UserGuid}) not valid - Generating new");
             }
 
             var guid = GenerateGuid();
@@ -26,6 +29,7 @@ namespace Bumbleberry.QMeService.Biz
 
             newDeviceInfo.UserGuid = guid;
             new UserData().StoreDeviceInfo(newDeviceInfo);
+            LogActivityCreateGuid(newDeviceInfo, $"Generated GUID: {newDeviceInfo.UserGuid}");
 
             return newDeviceInfo;
         }
@@ -52,6 +56,21 @@ namespace Bumbleberry.QMeService.Biz
         public IEnumerable<DeviceInfo> GetDeviceInfos()
         {
             return new UserData().GetDeviceInfos();
+        }
+
+        private void LogActivityCreateGuid(DeviceInfo newDeviceInfo, string appendMsg)
+        {
+            string msg = "";
+            if (!string.IsNullOrWhiteSpace(newDeviceInfo.DeviceName))
+                msg = $"{msg} - DeviceName: {newDeviceInfo.DeviceName}";
+            if (!string.IsNullOrWhiteSpace(newDeviceInfo.Model))
+                msg = $"{msg} - Model: {newDeviceInfo.Model}";
+            if (!string.IsNullOrWhiteSpace(newDeviceInfo.UserName))
+                msg = $"{msg} - UserName: {newDeviceInfo.UserName}";
+
+            msg = $"{msg} - {appendMsg}";
+
+            ActivityLogData.Log(newDeviceInfo.UserGuid, "UserBiz.LogActivityCreateGuid()", msg);
         }
     }
 }
