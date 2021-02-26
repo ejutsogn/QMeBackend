@@ -25,9 +25,9 @@ namespace QMeServiceTests
 
             var deviceInfo = new DeviceInfo() { UserGuid = expectedGuid };
 
-            var actualGuid = new UserBiz().GetUserGuid(deviceInfo);
+            var newDeviceInfo = new UserBiz().GetUserGuid(deviceInfo);
 
-            Assert.AreEqual(expectedGuid, actualGuid);
+            Assert.AreEqual(expectedGuid, newDeviceInfo.UserGuid);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace QMeServiceTests
             Assert.IsTrue(actualGuid1 != actualGuid3, "actualGuid1 and actualGuid3 are equal");
             Assert.IsTrue(actualGuid2 != actualGuid3, "actualGuid2 and actualGuid3 are equal");
 
-            Assert.IsTrue(log.Count() == 3, "Missing records in ActivityLog");
+            Assert.IsTrue(log.Count() == 3, $"Missing records in ActivityLog. Expected 3, found {log.Count()}");
         }
     }
 }
