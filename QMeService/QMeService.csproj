@@ -42,4 +42,8 @@
     <Folder Include="wwwroot\Assets\Images\Norway\Kongeparken\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
+  </ItemGroup>
+
 </Project>
