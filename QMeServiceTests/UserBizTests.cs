@@ -38,7 +38,7 @@ namespace QMeServiceTests
 
             var actualGuid = new UserBiz().GetUserGuid(deviceInfo);
 
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid));
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid.UserGuid));
         }
 
         [Test]
@@ -57,9 +57,9 @@ namespace QMeServiceTests
 
             var log = ActivityLogData.GetLog();
 
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid1), "ActualGuid1 is empty");
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid2), "ActualGuid2 is empty");
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid3), "ActualGuid3 is empty");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid1.UserGuid), "ActualGuid1 is empty");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid2.UserGuid), "ActualGuid2 is empty");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(actualGuid3.UserGuid), "ActualGuid3 is empty");
 
             Assert.IsTrue(actualGuid1 != actualGuid2, "actualGuid1 and actualGuid2 are equal");
             Assert.IsTrue(actualGuid1 != actualGuid3, "actualGuid1 and actualGuid3 are equal");

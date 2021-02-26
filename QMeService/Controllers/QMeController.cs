@@ -4,7 +4,9 @@ using Microsoft.Extensions.Logging;
 using Bumbleberry.QMeService.Biz;
 using Bumbleberry.QMeService.Models;
 using Bumbleberry.QMeService.Data.Log;
+using System.Threading.Tasks;
 
+//http://www.binaryintellect.net/articles/9db02aa1-c193-421e-94d0-926e440ed297.aspx
 namespace Bumbleberry.QMeService.Controllers
 {
     [ApiController]
@@ -70,13 +72,13 @@ namespace Bumbleberry.QMeService.Controllers
         }
 
         [HttpPost]
-        [Route("QMe/GetUserGuid")]
-        public string GetUserGuid([FromBody] DeviceInfo deviceInfo)
+        [Route("QMe/GetNewUserGuid")]
+        public ActionResult<DeviceInfo> GetNewUserGuid([FromBody] DeviceInfo deviceInfo)
         {
-            var guid = new UserBiz().GetUserGuid(deviceInfo);
-            return guid;
+            var userBiz = new UserBiz();
+            var newDeviceInfo = userBiz.GetUserGuid(deviceInfo);
+            return Ok(newDeviceInfo);
         }
-
 
 
         // Methods for testing

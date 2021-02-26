@@ -8,12 +8,13 @@ namespace Bumbleberry.QMeService.Biz
 {
     public class UserBiz
     {
-        public string GetUserGuid(DeviceInfo deviceInfo)
+        public DeviceInfo GetUserGuid(DeviceInfo deviceInfo)
         {
-            if (!string.IsNullOrWhiteSpace(deviceInfo.UserGuid))
+            var newDeviceInfo = deviceInfo;
+            if (!string.IsNullOrWhiteSpace(newDeviceInfo.UserGuid))
             {
-                ActivityLogData.Log(deviceInfo.UserGuid, "UserBiz.GetUserGuid()", $"UserGuid already exists in received DeviceInfo");
-                return deviceInfo.UserGuid;
+                ActivityLogData.Log(newDeviceInfo.UserGuid, "UserBiz.GetUserGuid()", $"UserGuid already exists in received DeviceInfo");
+                return newDeviceInfo;
             }
 
             var guid = GenerateGuid();
@@ -23,10 +24,10 @@ namespace Bumbleberry.QMeService.Biz
                 guid = GenerateGuid();
             }
 
-            deviceInfo.UserGuid = guid;
-            new UserData().StoreDeviceInfo(deviceInfo);
+            newDeviceInfo.UserGuid = guid;
+            new UserData().StoreDeviceInfo(newDeviceInfo);
 
-            return guid;
+            return newDeviceInfo;
         }
 
         private bool IsUniqueUserGuid(string guid)
