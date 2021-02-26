@@ -1,4 +1,4 @@
-﻿using Bumbleberry.QMeService.Data.Log;
+﻿using Bumbleberry.QMeService.Data.Logging;
 using Bumbleberry.QMeService.Models;
 using System.Collections.Generic;
 using System.Linq;

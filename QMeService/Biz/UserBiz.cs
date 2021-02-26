@@ -1,5 +1,5 @@
 ﻿using Bumbleberry.QMeService.Data;
-using Bumbleberry.QMeService.Data.Log;
+using Bumbleberry.QMeService.Data.Logging;
 using Bumbleberry.QMeService.Models;
 using System;
 using System.Collections.Generic;

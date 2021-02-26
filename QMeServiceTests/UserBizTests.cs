@@ -1,13 +1,7 @@
 using Bumbleberry.QMeService.Biz;
-using Bumbleberry.QMeService.Data;
-using Bumbleberry.QMeService.Data.Log;
+using Bumbleberry.QMeService.Data.Logging;
 using Bumbleberry.QMeService.Models;
-using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Models = Bumbleberry.QMeService.Models;
 
 namespace QMeServiceTests
 {

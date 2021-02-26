@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bumbleberry.QMeService.Biz;
 using Bumbleberry.QMeService.Models;
-using Bumbleberry.QMeService.Data.Log;
-using System.Threading.Tasks;
+using Bumbleberry.QMeService.Data.Logging;
 
 //http://www.binaryintellect.net/articles/9db02aa1-c193-421e-94d0-926e440ed297.aspx
 namespace Bumbleberry.QMeService.Controllers
