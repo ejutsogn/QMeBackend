@@ -3,6 +3,7 @@ using Bumbleberry.QMeService.Data.Logging;
 using Bumbleberry.QMeService.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bumbleberry.QMeService.Biz
 {
@@ -56,6 +57,11 @@ namespace Bumbleberry.QMeService.Biz
         public IEnumerable<DeviceInfo> GetDeviceInfos()
         {
             return new UserData().GetDeviceInfos();
+        }
+
+        public int GetDeviceInfoCount()
+        {
+            return new UserData().GetDeviceInfos().Count();
         }
 
         private void LogActivityCreateGuid(DeviceInfo newDeviceInfo, string appendMsg)

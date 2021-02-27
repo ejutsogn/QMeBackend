@@ -24,7 +24,7 @@ namespace Bumbleberry.QMeService
             //services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1.0", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My Demo API", Version = "1.0" });
+                c.SwaggerDoc("v1.0", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "QMeBackend QMeServices", Version = "1.0" });
             });
         }
 
@@ -62,7 +62,7 @@ namespace Bumbleberry.QMeService
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "My Demo API (V 1.0)");
+                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "QMeBackend QMeServices (V 1.0)");
             });
         }
     }

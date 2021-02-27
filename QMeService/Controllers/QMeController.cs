@@ -90,10 +90,24 @@ namespace Bumbleberry.QMeService.Controllers
         }
 
         [HttpGet]
+        [Route("QMe/GetDeviceInfoCount")]
+        public int GetDeviceInfoCount()
+        {
+            return new UserBiz().GetDeviceInfoCount();
+        }
+
+        [HttpGet]
         [Route("QMe/GetActivityLog")]
         public IEnumerable<ActivityLog> GetActivityLog()
         {
             return ActivityLogData.GetLog();
+        }
+
+        [HttpGet]
+        [Route("QMe/GetLogCount")]
+        public int GetLogCount()
+        {
+            return ActivityLogData.GetLogCount();
         }
     }
 }

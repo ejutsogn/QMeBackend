@@ -36,5 +36,14 @@ namespace Bumbleberry.QMeService.Data.Logging
                 StaticDbLog.activityLogs = new List<ActivityLog>();
             return StaticDbLog.activityLogs;
         }
+
+        public static int GetLogCount()
+        {
+            if (StaticDbLog.activityLogs == null)
+                StaticDbLog.activityLogs = new List<ActivityLog>();
+            
+            var count = StaticDbLog.activityLogs.Count;
+            return count;
+        }
     }
 }
