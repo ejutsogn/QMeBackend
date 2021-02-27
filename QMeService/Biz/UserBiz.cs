@@ -22,6 +22,7 @@ namespace Bumbleberry.QMeService.Biz
             }
 
             var guid = GenerateGuid();
+            newDeviceInfo.CreatedTime = DateTime.Now;
 
             while (!IsUniqueUserGuid(guid))
             {
