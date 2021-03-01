@@ -1,6 +1,12 @@
 ﻿
 namespace Bumbleberry.QMeService.Helper
 {
+    public static class Constants
+    {
+        public const string USERFRIENDLYERRORMESSAGE = "UFEM";
+        public const string SYSTEMERRORMESSAGE = "SEM";
+    }
+
     public enum StatusEnum
     {
         Closed,

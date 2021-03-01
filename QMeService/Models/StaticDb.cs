@@ -4,6 +4,7 @@ namespace Bumbleberry.QMeService.Models
 {
     public static class StaticDb
     {
-        public static List<DeviceInfo> deviceInfos;
+        public static List<DeviceInfo> DeviceInfos;
+        public static List<Person> Persons;
     }
 }

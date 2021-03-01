@@ -1,6 +1,8 @@
 ﻿using Bumbleberry.QMeService.Data;
 using Bumbleberry.QMeService.Data.Logging;
 using Bumbleberry.QMeService.Models;
+using QMeFrontend.Helper;
+using QMeFrontend.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace Bumbleberry.QMeService.Biz
             var newDeviceInfo = deviceInfo;
             if (!string.IsNullOrWhiteSpace(newDeviceInfo.UserGuid))
             {
-                ActivityLogData.Log(newDeviceInfo.UserGuid, "UserBiz.GetUserGuid()", $"UserGuid({newDeviceInfo.UserGuid}) found in received DeviceInfo");
+                ActivityLogData.Log(newDeviceInfo.UserGuid, "UserBiz.GetUserGuid()", $"UserGuid({newDeviceInfo.UserGuid}) found in received DeviceInfo - Returning if its unique");
                 if(IsUniqueUserGuid(newDeviceInfo.UserGuid))
                     return newDeviceInfo;
                 else
@@ -36,12 +38,77 @@ namespace Bumbleberry.QMeService.Biz
             return newDeviceInfo;
         }
 
+        public DtoCreateUser CreateUserAccount(DtoCreateUser dtoCreateUser)
+        {
+            var validate = ValidateCreateUserAccount(dtoCreateUser);
+            if(!validate.Status)
+            {
+                throw new Exception(validate.Message);
+            }
+
+            var newDtoCreateUser = dtoCreateUser;
+            var newDeviceInfo = GetUserGuid(newDtoCreateUser.DeviceInfo);
+            newDtoCreateUser.DeviceInfo = newDeviceInfo;
+
+            var person = newDtoCreateUser.Person;
+            person.UserGuid = newDeviceInfo.UserGuid;
+            CreatePerson(person);
+
+            ActivityLogData.Log(newDtoCreateUser.DeviceInfo.UserGuid, "UserBiz.CreateUserAccount()", $"UserGuid({newDtoCreateUser.DeviceInfo.UserGuid}) Created");
+
+            return newDtoCreateUser;
+        }
+
+        private ReturnStatus ValidateCreateUserAccount(DtoCreateUser dtoCreateUser)
+        {
+            var returnStatus = new ReturnStatus();
+            if(dtoCreateUser.DeviceInfo == null || dtoCreateUser.Person == null)
+            {
+                returnStatus.Status = false;
+                returnStatus.Message = ErrorHelper.SetSystemErrorMessage("Error calling CreateUserAccount(). DeviceInfo/Person is null") + ErrorHelper.SetUserFriendlyErrorMessage("Error creating user");
+            }
+
+            if (string.IsNullOrWhiteSpace(dtoCreateUser.Person.FirstName))
+            {
+                returnStatus.Status = false;
+                returnStatus.Message = ErrorHelper.SetUserFriendlyErrorMessage("First name is mandatory");
+            }
+
+            if (string.IsNullOrWhiteSpace(dtoCreateUser.Person.LastName))
+            {
+                returnStatus.Status = false;
+                returnStatus.Message = ErrorHelper.SetUserFriendlyErrorMessage("Last name is mandatory");
+            }
+
+            if (string.IsNullOrWhiteSpace(dtoCreateUser.Person.Email))
+            {
+                returnStatus.Status = false;
+                returnStatus.Message = ErrorHelper.SetUserFriendlyErrorMessage("Email is mandatory");
+            }
+
+            if (string.IsNullOrWhiteSpace(dtoCreateUser.DeviceInfo.UserPassword))
+            {
+                returnStatus.Status = false;
+                returnStatus.Message = ErrorHelper.SetUserFriendlyErrorMessage("Password is mandatory");
+            }
+            return returnStatus;
+        }
+
+        private void CreatePerson(Person person)
+        {
+            new UserData().StorePerson(person);
+        }
+
         private bool IsUniqueUserGuid(string guid)
         {
             var deviceInfo = new UserData().GetDeviceInfo(guid);
             if (deviceInfo != null && deviceInfo.UserGuid == guid)
                 return false;
-            
+
+            var person = new UserData().GetPerson(guid);
+            if (person != null && person.UserGuid == guid)
+                return false;
+
             return true;
         }
 
@@ -53,6 +120,16 @@ namespace Bumbleberry.QMeService.Biz
             var guid = random.Next(1, 9).ToString() + random.Next(1, 9).ToString();
 
             return guid;
+        }
+
+        public IEnumerable<Person> GetPersons()
+        {
+            return new UserData().GetPersons();
+        }
+
+        public int GetPersonCount()
+        {
+            return new UserData().GetPersons().Count();
         }
 
         public IEnumerable<DeviceInfo> GetDeviceInfos()

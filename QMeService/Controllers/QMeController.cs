@@ -79,8 +79,31 @@ namespace Bumbleberry.QMeService.Controllers
             return Ok(newDeviceInfo);
         }
 
+        [HttpPost]
+        [Route("QMe/CreateUserAccount")]
+        public ActionResult<DeviceInfo> CreateUserAccount([FromBody] DtoCreateUser dtoCreateUser)
+        {
+            var userBiz = new UserBiz();
+            var newDtoCreateUser = userBiz.CreateUserAccount(dtoCreateUser);
+            return Ok(newDtoCreateUser);
+        }
+
 
         // Methods for testing
+
+        [HttpGet]
+        [Route("QMe/GetPersons")]
+        public IEnumerable<Person> GetPersons()
+        {
+            return new UserBiz().GetPersons();
+        }
+
+        [HttpGet]
+        [Route("QMe/GetPersonCount")]
+        public int GetPersonCount()
+        {
+            return new UserBiz().GetPersonCount();
+        }
 
         [HttpGet]
         [Route("QMe/GetDeviceInfos")]
