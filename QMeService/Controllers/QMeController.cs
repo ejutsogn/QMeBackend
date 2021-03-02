@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using Bumbleberry.QMeService.Biz;
 using Bumbleberry.QMeService.Models;
 using Bumbleberry.QMeService.Data.Logging;
+using Bumbleberry.QMeService.Helper;
+using System;
 
 //http://www.binaryintellect.net/articles/9db02aa1-c193-421e-94d0-926e440ed297.aspx
 namespace Bumbleberry.QMeService.Controllers
@@ -74,6 +76,7 @@ namespace Bumbleberry.QMeService.Controllers
         [Route("QMe/GetNewUserGuid")]
         public ActionResult<DeviceInfo> GetNewUserGuid([FromBody] DeviceInfo deviceInfo)
         {
+            ActivityLogData.Log(Constants.SYSTEM_USER, "ApiController.GetNewUserGuid()", $"Call received");
             var userBiz = new UserBiz();
             var newDeviceInfo = userBiz.GetUserGuid(deviceInfo);
             return Ok(newDeviceInfo);
@@ -83,9 +86,17 @@ namespace Bumbleberry.QMeService.Controllers
         [Route("QMe/CreateUserAccount")]
         public ActionResult<DeviceInfo> CreateUserAccount([FromBody] DtoCreateUser dtoCreateUser)
         {
-            var userBiz = new UserBiz();
-            var newDtoCreateUser = userBiz.CreateUserAccount(dtoCreateUser);
-            return Ok(newDtoCreateUser);
+            try
+            {
+                ActivityLogData.Log(Constants.SYSTEM_USER, "ApiController.CreateUserAccount()", $"Call received");
+                var userBiz = new UserBiz();
+                var newDtoCreateUser = userBiz.CreateUserAccount(dtoCreateUser);
+                return Ok(newDtoCreateUser);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
 

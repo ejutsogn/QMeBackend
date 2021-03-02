@@ -1,5 +1,6 @@
 ﻿using Bumbleberry.QMeService.Data;
 using Bumbleberry.QMeService.Data.Logging;
+using Bumbleberry.QMeService.Helper;
 using Bumbleberry.QMeService.Models;
 using QMeFrontend.Helper;
 using QMeFrontend.Models;
@@ -43,6 +44,7 @@ namespace Bumbleberry.QMeService.Biz
             var validate = ValidateCreateUserAccount(dtoCreateUser);
             if(!validate.Status)
             {
+                ActivityLogData.Log(Constants.SYSTEM_USER, "UserBiz.CreateUserAccount()", $"Validation failed - {validate.Message}");
                 throw new Exception(validate.Message);
             }
 

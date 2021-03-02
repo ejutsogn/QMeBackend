@@ -3,6 +3,7 @@ namespace Bumbleberry.QMeService.Helper
 {
     public static class Constants
     {
+        public const string SYSTEM_USER = "SYSTEM_USER";
         public const string USERFRIENDLYERRORMESSAGE = "UFEM";
         public const string SYSTEMERRORMESSAGE = "SEM";
     }
