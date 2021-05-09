@@ -41,39 +41,42 @@ namespace Bumbleberry.QMeService.Controllers
 
         [HttpGet]
         [Route("QMe/GetActivities")]
-        public IEnumerable<Activity> GetActivities(string countryId="", string companyId="", string userId="10")
+        public IEnumerable<Activity> GetActivities(string countryId, string companyGuid, string userGuid)
         {
-            if (string.IsNullOrEmpty(userId))
-                userId = "-999";
-            
-            var activities = new ActivityBiz().GetActivities(countryId, companyId, userId);
+            var activities = new ActivityBiz().GetActivities(countryId, companyGuid, userGuid);
             return activities;
         }
 
         [HttpPost]
         [Route("QMe/AddInQueue")]
-        public Activity AddInQueue([FromBody] string countryId, string companyId, string userId, string activityId)
+        [Logging("ApiController.AddInQueue()")]
+        public QueueInfo AddInQueue([FromBody] string countryId, string companyGuid, string activityGuid, string userGuid)
         {
-            if (string.IsNullOrEmpty(userId))
-                userId = "-999";
-            new QueueBiz().AddInQueue(countryId, companyId, userId, activityId);
-            var activity = new ActivityBiz().GetActivity(countryId, companyId, userId, activityId);
-            return activity;
+            var queueInfo = new QueueBiz().AddInQueue(countryId, companyGuid, activityGuid, userGuid);
+            return queueInfo;
         }
 
         [HttpPost]
         [Route("QMe/RemoveFromQueue")]
-        public Activity RemoveFromQueue([FromBody] string countryId, string companyId, string userId, string activityId)
+        [Logging("ApiController.RemoveFromQueue()")]
+        public QueueInfo RemoveFromQueue([FromBody] string countryGuid, string companyGuid, string userGuid, string activityGuid)
         {
-            if (string.IsNullOrEmpty(userId))
-                userId = "-999";
-            new QueueBiz().RemoveFromQueue(countryId, companyId, userId, activityId);
-            var activity = new ActivityBiz().GetActivity(countryId, companyId, userId, activityId);
-            return activity;
+            var queueInfo = new QueueBiz().RemoveFromQueue(countryGuid, companyGuid, activityGuid, userGuid);
+            return queueInfo;
+        }
+
+        [HttpGet]
+        [Route("QMe/GetQueue")]
+        [Logging("ApiController.GetQueue()")]
+        public QueueInfo GetQueue(string countryId, string companyGuid, string activityGuid, string userGuid)
+        {
+            var queueInfo = new QueueBiz().GetActivityQueueInfo(countryId, companyGuid, activityGuid, userGuid);
+            return queueInfo;
         }
 
         [HttpPost]
         [Route("QMe/GetNewUserGuid")]
+        [Logging("ApiController.GetNewUserGuid()")]
         public ActionResult<DeviceInfo> GetNewUserGuid([FromBody] DeviceInfo deviceInfo)
         {
             ActivityLogData.Log(Constants.SYSTEM_USER, "ApiController.GetNewUserGuid()", $"Call received");
@@ -84,11 +87,11 @@ namespace Bumbleberry.QMeService.Controllers
 
         [HttpPost]
         [Route("QMe/CreateUserAccount")]
+        [Logging("ApiController.CreateUserAccount()")]
         public ActionResult<DeviceInfo> CreateUserAccount([FromBody] DtoCreateUser dtoCreateUser)
         {
             try
             {
-                ActivityLogData.Log(Constants.SYSTEM_USER, "ApiController.CreateUserAccount()", $"Call received");
                 var userBiz = new UserBiz();
                 var newDtoCreateUser = userBiz.CreateUserAccount(dtoCreateUser);
                 return Ok(newDtoCreateUser);

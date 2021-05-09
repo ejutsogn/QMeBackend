@@ -88,6 +88,12 @@ namespace Bumbleberry.QMeService.Biz
                 returnStatus.Message = ErrorHelper.SetUserFriendlyErrorMessage("Email is mandatory");
             }
 
+            if (string.IsNullOrWhiteSpace(dtoCreateUser.DeviceInfo.UserName))
+            {
+                returnStatus.Status = false;
+                returnStatus.Message = ErrorHelper.SetUserFriendlyErrorMessage("Username is mandatory");
+            }
+
             if (string.IsNullOrWhiteSpace(dtoCreateUser.DeviceInfo.UserPassword))
             {
                 returnStatus.Status = false;

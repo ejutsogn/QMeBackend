@@ -23,7 +23,6 @@ namespace Bumbleberry.QMeService.Biz
         {
             var activities = _activityData.GetActivities(countryId, companyId).ToList();
             UpdateActivityStatusAndQueue(countryId, companyId, userId, activities);
-            _queueBiz.RemoveQueueFromQueueInfo(activities);
             return activities;
         }
 
@@ -32,20 +31,19 @@ namespace Bumbleberry.QMeService.Biz
             foreach (var activity in activities)
             {
                 UpdateActivityStatusAndQueue(countryId, companyId, userId, activity);
-                _queueBiz.UpdateQueue(countryId, companyId, userId, activity.Id);
             }
         }
 
-        private void UpdateActivityStatusAndQueue(string countryId, string companyId, string userId, Activity activity)
+        private void UpdateActivityStatusAndQueue(string countryGuid, string companyGuid, string userGuid, Activity activity)
         {
-            activity.QueueInfo = _queueBiz.GetActivityQueueInfo(countryId, companyId, userId, activity.Id);
+            //activity.QueueInfo = _queueBiz.GetActivityQueueInfo(countryGuid, companyGuid, activity.Id, userGuid);
             activity.Status = _statusBiz.GetActivityStatus(activity.Id);
         }
 
-        public Activity GetActivity(string countryId, string companyId, string userId, string activityId)
+        public Activity GetActivity(string countryId, string companyGuid, string activityGuid, string userGuid)
         {
-            var activity = _activityData.GetActivity(activityId);
-            UpdateActivityStatusAndQueue(countryId, companyId, userId, activity);
+            var activity = _activityData.GetActivity(countryId, companyGuid, activityGuid);
+            UpdateActivityStatusAndQueue(countryId, companyGuid, userGuid, activity);
 
             return activity;
         }

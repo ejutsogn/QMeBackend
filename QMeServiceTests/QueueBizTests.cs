@@ -34,7 +34,7 @@ namespace QMeServiceTests
             queue.AddRange(queue5);
             queue.AddRange(queue6);
 
-            queueDataMock.Setup(x => x.GetActivityQueues()).Returns(queue);
+            //queueDataMock.Setup(x => x.GetActivityQueues("1", "1")).Returns(queue);
             var queueBizInherited = new QueueBizInherited(queueDataMock.Object);
 
             var actualIdWithMaxQueue = queueBizInherited.GetActivityIdWithMaxQueueNumbers(queue);
@@ -47,6 +47,9 @@ namespace QMeServiceTests
         [TestCase(102, 98, 0, 0, 20, 50, "act2")]
         public void GetActivityQueueInfosWithLongestProgressbar(int nrQ1, int nrQ2, int nrQ3, int nrQ4, int nrQ5, int nrQ6, string expectedActivityIdLongestProgressbar)
         {
+            var countryId = "1";
+            var companyGuid = "1";
+            var userGuid = "12345";
             var queueDataMock = new Mock<IQueueData>();
             var queue = QueueDataTestHelper.GetActivityQueues("act1", nrQ1).ToList();
             var queue2 = QueueDataTestHelper.GetActivityQueues("act2", nrQ2);
@@ -61,15 +64,16 @@ namespace QMeServiceTests
             queue.AddRange(queue5);
             queue.AddRange(queue6);
 
-            queueDataMock.Setup(x => x.GetActivityQueues()).Returns(queue);
+            queueDataMock.Setup(x => x.GetActivityQueues(countryId, companyGuid, "", "")).Returns(queue);
+            queueDataMock.Setup(x => x.GetActivityQueues(countryId, companyGuid, It.IsAny<string>(), userGuid)).Returns(queue2);
             var queueBizInherited = new QueueBizInherited(queueDataMock.Object);
 
-            var queueInfos = queueBizInherited.GetActivityQueueInfos("","","");
+            var queueInfos = queueBizInherited.GetActivityQueueInfos(countryId, companyGuid, userGuid);
             var queueInfo = queueInfos
                                     .OrderByDescending(x => x.ProgressBarInPercent)
                                     .FirstOrDefault();
 
-            var actualIdWithLongestProgressbar = queueInfo.ActitityId;
+            var actualIdWithLongestProgressbar = queueInfo.ActitityGuid;
 
             Assert.AreEqual(expectedActivityIdLongestProgressbar, actualIdWithLongestProgressbar, $"Expected id: {expectedActivityIdLongestProgressbar} -  Actual id: {actualIdWithLongestProgressbar}");
         }
@@ -86,28 +90,28 @@ namespace QMeServiceTests
 
         public new IEnumerable<Models.QueueInfo> GetActivityQueueInfos(string countryId, string companyId, string userId)
         {
-            return base.GetActivityQueueInfos(countryId, companyId, userId);
+            return base.GetQueueInfos(countryId, companyId, userId);
         }
     }
 
     public static class QueueDataTestHelper
     {
-        public static IEnumerable<Models.Queue> GetActivityQueues(string activityId, int nrOfQueueItems)
+        public static IEnumerable<Models.Queue> GetActivityQueues(string activityGuid, int nrOfQueueItems)
         {
             var countryId = "NOR";
-            var companyId = "KRSDYREPARK";
+            var companyGuid = "KRSDYREPARK";
             var models = new List<Models.Queue>();
-            for (int i = 1; i < nrOfQueueItems; i++)
+            for (int i = 1; i <= nrOfQueueItems; i++)
             {
-                models.Add(GetNewQueueItem(countryId, companyId, (100+i).ToString(), activityId, i));
+                models.Add(GetNewQueueItem(countryId, companyGuid, activityGuid, (100+i).ToString(), i));
             }
 
             return models;
         }
 
-        private static Models.Queue GetNewQueueItem(string countryId, string companyId, string userId, string actitityId, int nrInQueue)
+        private static Models.Queue GetNewQueueItem(string countryId, string companyGuid, string actitityGuid, string userGuid, int nrInQueue)
         {
-            return new Models.Queue(countryId, companyId, userId, actitityId) { NrInQueue = nrInQueue, TimeAdded = DateTime.Now.AddSeconds(nrInQueue*3) };
+            return new Models.Queue(countryId, companyGuid, actitityGuid, userGuid) { QueueTime = DateTime.Now.AddSeconds(nrInQueue*3) };
         }
     }
 }

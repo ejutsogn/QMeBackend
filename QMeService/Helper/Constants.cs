@@ -6,6 +6,9 @@ namespace Bumbleberry.QMeService.Helper
         public const string SYSTEM_USER = "SYSTEM_USER";
         public const string USERFRIENDLYERRORMESSAGE = "UFEM";
         public const string SYSTEMERRORMESSAGE = "SEM";
+
+        public const int MINUTES_EXPIRED_BEFORE_REMOVED_FROM_QUEUE = 5;
+        public const int DEFAULT_YOUR_NUMBER_IN_QUEUE = 999;
     }
 
     public enum StatusEnum
